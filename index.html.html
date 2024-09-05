@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    background-color: #f7f7f7;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+#display {
+    height: 50px;
+    font-size: 24px;
+    text-align: right;
+}
+
+button {
+    font-size: 20px;
+    height: 60px;
+}
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Advanced Calculator</h4>
+                        <input type="text" id="display" class="form-control mb-3" disabled>
+                        <div class="row">
+                            <button class="btn btn-light col-3" onclick="appendNumber('7')">7</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('8')">8</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('9')">9</button>
+                            <button class="btn btn-warning col-3" onclick="performOperation('/')">/</button>
+                        </div>
+                        <div class="row mt-2">
+                            <button class="btn btn-light col-3" onclick="appendNumber('4')">4</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('5')">5</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('6')">6</button>
+                            <button class="btn btn-warning col-3" onclick="performOperation('*')">*</button>
+                        </div>
+                        <div class="row mt-2">
+                            <button class="btn btn-light col-3" onclick="appendNumber('1')">1</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('2')">2</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('3')">3</button>
+                            <button class="btn btn-warning col-3" onclick="performOperation('-')">-</button>
+                        </div>
+                        <div class="row mt-2">
+                            <button class="btn btn-light col-3" onclick="appendNumber('0')">0</button>
+                            <button class="btn btn-light col-3" onclick="appendNumber('.')">.</button>
+                            <button class="btn btn-danger col-3" onclick="clearDisplay()">C</button>
+                            <button class="btn btn-warning col-3" onclick="performOperation('+')">+</button>
+                        </div>
+                        <div class="row mt-2">
+                            <button class="btn btn-info col-3" onclick="performOperation('%')">%</button>
+                            <button class="btn btn-secondary col-3" onclick="memoryAdd()">M+</button>
+                            <button class="btn btn-secondary col-3" onclick="memorySubtract()">M-</button>
+                            <button class="btn btn-secondary col-3" onclick="memoryClear()">MC</button>
+                        </div>
+                        <div class="row mt-2">
+                            <button class="btn btn-success col-12" onclick="calculateResult()">=</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+    <script>
+        let display = document.getElementById('display');
+let currentInput = '';
+let operator = null;
+let previousInput = '';
+let memory = 0;
+
+function appendNumber(number) {
+    currentInput += number;
+    display.value = currentInput;
+}
+
+function performOperation(op) {
+    if (currentInput === '') return;
+    if (operator !== null) calculateResult();
+    previousInput = currentInput;
+    operator = op;
+    currentInput = '';
+}
+
+function clearDisplay() {
+    currentInput = '';
+    previousInput = '';
+    operator = null;
+    display.value = '';
+}
+
+function calculateResult() {
+    if (operator === null || currentInput === '') return;
+    let result;
+    switch (operator) {
+        case '+':
+            result = parseFloat(previousInput) + parseFloat(currentInput);
+            break;
+        case '-':
+            result = parseFloat(previousInput) - parseFloat(currentInput);
+            break;
+        case '*':
+            result = parseFloat(previousInput) * parseFloat(currentInput);
+            break;
+        case '/':
+            result = parseFloat(previousInput) / parseFloat(currentInput);
+            break;
+    }
+    display.value = result;
+    currentInput = result.toString();
+    operator = null;
+}
+function memoryAdd() {
+    if (currentInput !== '') {
+        memory += parseFloat(currentInput);
+        currentInput = '';
+        display.value = 'Memory: ' + memory;
+    }
+}
+
+function memorySubtract() {
+    if (currentInput !== '') {
+        memory -= parseFloat(currentInput);
+        currentInput = '';
+        display.value = 'Memory: ' + memory;
+    }
+}
+
+function memoryClear() {
+    memory = 0;
+    display.value = '';
+}
+
+    </script>
+</body>
+</html>
